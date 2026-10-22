@@ -1,553 +1,294 @@
-<!DOCTYPE html>  <html lang="id">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">  
-<meta name="theme-color" content="#070b18">  <title>ZAL TikTok Downloader</title>  <style>  
-* {  
-  box-sizing: border-box;  
-  -webkit-tap-highlight-color: transparent;  
-}  
-  
-:root {  
-  --blue: #168cff;  
-  --cyan: #00e5ff;  
-  --bg: #070b18;  
-}  
-  
-body {  
-  margin: 0;  
-  min-height: 100vh;  
-  background: var(--bg);  
-  color: white;  
-  font-family: Arial, sans-serif;  
-}  
-  
-/* ===== ANIMASI LOGO 3 DETIK ===== */  
-  
-#splash {  
-  position: fixed;  
-  inset: 0;  
-  z-index: 99999;  
-  display: flex;  
-  flex-direction: column;  
-  align-items: center;  
-  justify-content: center;  
-  overflow: hidden;  
-  background: radial-gradient(circle, #102d61, #070b18 72%);  
-  transition: opacity .25s ease, visibility .25s ease;  
-}  
-  
-#splash.hide {  
-  opacity: 0;  
-  visibility: hidden;  
-  pointer-events: none;  
-}  
-  
-.splash-logo {  
-  width: 115px;  
-  height: 115px;  
-  opacity: 0;  
-  animation:  
-    logoMasuk .8s cubic-bezier(.2,.8,.2,1) forwards,  
-    logoGlow 1s ease-in-out .8s infinite alternate;  
-}  
-  
-.splash-title {  
-  margin-top: 18px;  
-  font-size: 32px;  
-  font-weight: 900;  
-  letter-spacing: 7px;  
-  opacity: 0;  
-  animation: teksMasuk .45s ease .25s forwards;  
-}  
-  
-.splash-subtitle {  
-  margin-top: 9px;  
-  font-size: 11px;  
-  letter-spacing: 3px;  
-  color: #91dfff;  
-  opacity: 0;  
-  animation: teksMasuk .45s ease .45s forwards;  
-}  
-  
-.splash-line {  
-  width: 120px;  
-  height: 4px;  
-  overflow: hidden;  
-  margin-top: 28px;  
-  border-radius: 10px;  
-  background: #1c3152;  
-  opacity: 0;  
-  animation: teksMasuk .3s ease .6s forwards;  
-}  
-  
-.splash-line::after {  
-  content: "";  
-  display: block;  
-  width: 45%;  
-  height: 100%;  
-  border-radius: 10px;  
-  background: var(--cyan);  
-  box-shadow: 0 0 12px var(--cyan);  
-  animation: garis 1s ease-in-out infinite;  
-}  
-  
-@keyframes logoMasuk {  
-  0% {  
-    opacity: 0;  
-    transform: scale(.25) rotate(-15deg);  
-  }  
-  70% {  
-    opacity: 1;  
-    transform: scale(1.12) rotate(3deg);  
-  }  
-  100% {  
-    opacity: 1;  
-    transform: scale(1) rotate(0);  
-  }  
-}  
-  
-@keyframes logoGlow {  
-  from {  
-    filter: drop-shadow(0 0 5px #168cff);  
-  }  
-  to {  
-    filter: drop-shadow(0 0 22px #00e5ff);  
-  }  
-}  
-  
-@keyframes teksMasuk {  
-  from {  
-    opacity: 0;  
-    transform: translateY(10px);  
-  }  
-  to {  
-    opacity: 1;  
-    transform: translateY(0);  
-  }  
-}  
-  
-@keyframes garis {  
-  from { transform: translateX(-110%); }  
-  to { transform: translateX(330%); }  
-}  
-  
-/* ===== HEADER ===== */  
-  
-header {  
-  display: flex;  
-  align-items: center;  
-  gap: 12px;  
-  padding: 17px 20px;  
-  background: #0a1020;  
-  border-bottom: 1px solid #1a2944;  
-}  
-  
-.header-logo {  
-  width: 44px;  
-  height: 44px;  
-}  
-  
-.brand {  
-  font-size: 19px;  
-  font-weight: 900;  
-  letter-spacing: 2px;  
-}  
-  
-.brand small {  
-  display: block;  
-  margin-top: 4px;  
-  color: #8ca6cc;  
-  font-size: 10px;  
-  font-weight: normal;  
-  letter-spacing: 1px;  
-}  
-  
-/* ===== KONTEN ===== */  
-  
-main {  
-  width: min(100% - 30px, 480px);  
-  margin: 28px auto;  
-}  
-  
-.hero {  
-  padding: 22px 8px;  
-  text-align: center;  
-}  
-  
-.hero h1 {  
-  margin: 0;  
-  font-size: 28px;  
-  font-weight: 900;  
-}  
-  
-.hero h1 span {  
-  color: var(--cyan);  
-}  
-  
-.hero p {  
-  color: #92a6c5;  
-  font-size: 13px;  
-  line-height: 1.7;  
-}  
-  
-.card {  
-  padding: 20px;  
-  border: 1px solid #203657;  
-  border-radius: 20px;  
-  background: linear-gradient(145deg, #111d35, #0c1325);  
-  box-shadow: 0 10px 35px #0004;  
-}  
-  
-.label {  
-  display: block;  
-  margin-bottom: 12px;  
-  color: #b7cbe7;  
-  font-size: 13px;  
-  font-weight: bold;  
-}  
-  
-.input-row {  
-  display: flex;  
-  gap: 8px;  
-}  
-  
-input {  
-  width: 100%;  
-  min-width: 0;  
-  height: 48px;  
-  padding: 0 12px;  
-  border: 1px solid #2a4165;  
-  border-radius: 12px;  
-  outline: none;  
-  background: #080f20;  
-  color: white;  
-  font-size: 13px;  
-}  
-  
-input:focus {  
-  border-color: var(--blue);  
-}  
-  
-button {  
-  border: 0;  
-  color: white;  
-  font-weight: bold;  
-  cursor: pointer;  
-}  
-  
-.paste-btn {  
-  padding: 0 13px;  
-  border-radius: 12px;  
-  background: #203657;  
-}  
-  
-.download-btn {  
-  width: 100%;  
-  min-height: 52px;  
-  margin-top: 14px;  
-  border-radius: 13px;  
-  background: linear-gradient(100deg, #0878ff, #00bde9);  
-  box-shadow: 0 5px 20px #008cff35;  
-  font-size: 15px;  
-}  
-  
-button:active {  
-  transform: scale(.98);  
-}  
-  
-.download-btn:disabled {  
-  opacity: .65;  
-}  
-  
-.status {  
-  display: none;  
-  margin-top: 14px;  
-  padding: 12px;  
-  border-radius: 10px;  
-  background: #09172b;  
-  color: #a4ddff;  
-  font-size: 12px;  
-  line-height: 1.6;  
-  overflow-wrap: anywhere;  
-}  
-  
-.status.show {  
-  display: block;  
-}  
-  
-.features {  
-  display: grid;  
-  grid-template-columns: repeat(3, 1fr);  
-  gap: 10px;  
-  margin-top: 16px;  
-}  
-  
-.feature {  
-  padding: 14px 5px;  
-  border: 1px solid #1b2c49;  
-  border-radius: 13px;  
-  background: #0c1426;  
-  text-align: center;  
-}  
-  
-.feature .icon {  
-  font-size: 22px;  
-}  
-  
-.feature p {  
-  margin: 7px 0 0;  
-  color: #a8bad5;  
-  font-size: 11px;  
-}  
-  
-.note {  
-  margin-top: 20px;  
-  color: #7184a4;  
-  text-align: center;  
-  font-size: 11px;  
-  line-height: 1.7;  
-}  
-  
-footer {  
-  padding: 20px;  
-  color: #526786;  
-  text-align: center;  
-  font-size: 11px;  
-}  
-  
-@media (prefers-reduced-motion: reduce) {  
-  .splash-logo,  
-  .splash-title,  
-  .splash-subtitle,  
-  .splash-line,  
-  .splash-line::after {  
-    animation: none;  
-    opacity: 1;  
-  }  
-}  
-</style>  </head>  <body>  <!-- LOGO PEMBUKA -->  <div id="splash">  
-  <svg class="splash-logo" viewBox="0 0 120 120"  
-       xmlns="http://www.w3.org/2000/svg">  
-    <defs>  
-      <linearGradient id="zalGradient" x1="0" y1="0" x2="1" y2="1">  
-        <stop offset="0%" stop-color="#00e5ff"/>  
-        <stop offset="100%" stop-color="#2860ff"/>  
-      </linearGradient>  
-    </defs>  <rect x="4" y="4" width="112" height="112" rx="27"  
-      fill="#0b1730" stroke="#168cff" stroke-width="2"/>  
-
-<path d="M27 35 H94 L43 84 H94"  
-      fill="none" stroke="url(#zalGradient)"  
-      stroke-width="12" stroke-linecap="round"  
-      stroke-linejoin="round"/>  
-
-<circle cx="94" cy="84" r="6" fill="#00e5ff"/>
-
-  </svg>    <div class="splash-title">ZAL</div>  
-  <div class="splash-subtitle">TIKTOK DOWNLOADER</div>  
-  <div class="splash-line"></div>  
-</div>  <!-- HEADER -->  <header>  
-  <svg class="header-logo" viewBox="0 0 120 120"  
-       xmlns="http://www.w3.org/2000/svg">  
-    <rect x="4" y="4" width="112" height="112" rx="27"  
-          fill="#0b1730" stroke="#168cff" stroke-width="3"/>  
-    <path d="M27 35 H94 L43 84 H94"  
-          fill="none" stroke="#00d9ff" stroke-width="12"  
-          stroke-linecap="round" stroke-linejoin="round"/>  
-  </svg>    <div class="brand">  
-    ZAL  
-    <small>TIKTOK DOWNLOADER</small>  
-  </div>  
-</header>  <main>  
-  <section class="hero">  
-    <h1>Download <span>TikTok</span></h1>  
-    <p>Tempel tautan video TikTok untuk memulai unduhan.</p>  
-  </section>    <section class="card">  
-    <label class="label" for="videoUrl">🔗 Tautan video TikTok</label>  <div class="input-row">  
-  <input  
-    id="videoUrl"  
-    type="url"  
-    placeholder="Tempel link TikTok di sini"  
-    autocomplete="off"  
-  >  
-  <button class="paste-btn" id="pasteBtn">Tempel</button>  
-</div>  
-
-<button class="download-btn" id="downloadBtn">  
-  ↓ &nbsp; DOWNLOAD VIDEO  
-</button>  
-
-<div class="status" id="status" role="status"></div>
-
-  </section>    <section class="features">  
-    <div class="feature">  
-      <div class="icon">⚡</div>  
-      <p>Proses praktis</p>  
-    </div>  <div class="feature">  
-  <div class="icon">📱</div>  
-  <p>Ramah HP</p>  
-</div>  
-
-<div class="feature">  
-  <div class="icon">🎬</div>  
-  <p>Video TikTok</p>  
+<!DOCTYPE html><html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#070b18">
+<title>ZAL TikTok Downloader V4</title><style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--blue:#168cff;--cyan:#00e5ff;--bg:#070b18}
+body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer;color:white;font-weight:bold;border:0}
+header{display:flex;align-items:center;gap:12px;padding:15px 18px;background:#0a1020;border-bottom:1px solid #1a2944}
+.logo{width:45px;height:45px}
+.brand{font-weight:900;font-size:19px;letter-spacing:2px}
+.brand small{display:block;font-size:10px;color:#8ca6cc;letter-spacing:1px;margin-top:4px;font-weight:normal}
+main{width:min(100% - 28px,480px);margin:22px auto}
+.hero{text-align:center;padding:16px 0}
+.hero h1{font-size:28px;margin:0}
+.hero h1 span{color:var(--cyan)}
+.hero p{font-size:13px;color:#92a6c5;line-height:1.6}
+.card{padding:18px;border:1px solid #203657;border-radius:18px;background:linear-gradient(145deg,#111d35,#0c1325)}
+.label{display:block;font-size:13px;font-weight:bold;color:#b7cbe7;margin-bottom:10px}
+.row{display:flex;gap:8px}
+input{width:100%;min-width:0;height:48px;padding:0 12px;border:1px solid #2a4165;border-radius:11px;background:#080f20;color:white;outline:none;font-size:13px}
+input:focus{border-color:var(--blue)}
+button:disabled{opacity:.6}
+.paste{padding:0 12px;background:#203657;border-radius:11px}
+.primary{width:100%;height:51px;margin-top:12px;border-radius:12px;background:linear-gradient(100deg,#0878ff,#00bde9)}
+.status{display:none;padding:12px;margin-top:12px;background:#09172b;color:#a4ddff;border-radius:10px;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.status.show{display:block}
+.results{display:none;margin-top:16px}
+.results.show{display:block}
+.results h3{font-size:14px}
+.item{display:flex;align-items:center;gap:11px;margin-top:10px;padding:10px;background:#091326;border:1px solid #203657;border-radius:12px}
+.thumb{width:82px;height:82px;object-fit:cover;border-radius:8px;background:#15243b;flex-shrink:0}
+.info{flex:1;min-width:0}
+.info strong{display:block;font-size:12px;margin-bottom:7px;overflow-wrap:anywhere}
+.info small{display:block;font-size:11px;color:#8ca6cc;margin-bottom:9px}
+.action{display:inline-block;text-decoration:none;color:#fff;background:#0878ff;border-radius:8px;padding:10px 12px;font-size:11px;font-weight:bold}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}
+.feature{text-align:center;padding:13px 4px;background:#0c1426;border:1px solid #1b2c49;border-radius:12px}
+.feature .icon{font-size:22px}
+.feature p{font-size:11px;color:#a8bad5;margin:7px 0 0}
+.note{text-align:center;color:#7184a4;font-size:11px;line-height:1.7;margin-top:20px}
+footer{text-align:center;padding:20px;color:#526786;font-size:11px}
+</style></head><body>
+<header>
+<svg class="logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+<rect x="4" y="4" width="112" height="112" rx="27" fill="#0b1730" stroke="#168cff" stroke-width="3"/>
+<path d="M27 35 H94 L43 84 H94" fill="none" stroke="#00d9ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<div class="brand">ZAL<small>TIKTOK DOWNLOADER V4</small></div>
+</header><main>
+<section class="hero">
+<h1>Download <span>TikTok</span></h1>
+<p>Unduh video MP4 atau foto TikTok langsung dari tautannya.</p>
+</section><section class="card">
+<label class="label" for="videoUrl">🔗 Tautan video atau foto TikTok</label>
+<div class="row">
+<input id="videoUrl" type="url" placeholder="Tempel link TikTok di sini" autocomplete="off">
+<button class="paste" id="pasteBtn" type="button">Tempel</button>
 </div>
+<button class="primary" id="downloadBtn" type="button">⬇ CARI VIDEO / FOTO</button>
+<div class="status" id="status" role="status"></div>
+<section class="results" id="results">
+<h3>📦 Hasil unduhan</h3>
+<div id="items"></div>
+</section>
+</section><section class="features">
+<div class="feature"><div class="icon">⚡</div><p>Praktis</p></div>
+<div class="feature"><div class="icon">📸</div><p>Foto & slideshow</p></div>
+<div class="feature"><div class="icon">🎬</div><p>Video MP4</p></div>
+</section><p class="note">Gunakan untuk konten milikmu atau konten yang kamu punya izin untuk menyimpannya. Unduhan langsung bergantung pada dukungan server dan browser.</p>
+</main>
+<footer>© 2026 ZAL DOWNLOADER</footer><script>
+"use strict";
 
-  </section>    <p class="note">  
-    Kecepatan unduhan bergantung pada jaringan dan layanan video.  
-    Unduh konten yang kamu miliki atau diizinkan untuk disimpan.  
-  </p>  
-</main>  <footer>© 2026 ZAL DOWNLOADER</footer>  <script>  
-"use strict";  
-  
-const splash = document.getElementById("splash");  
-const urlInput = document.getElementById("videoUrl");  
-const downloadBtn = document.getElementById("downloadBtn");  
-const pasteBtn = document.getElementById("pasteBtn");  
-const statusBox = document.getElementById("status");  
-  
-/* Tampilkan animasi selama 3 detik */  
-setTimeout(() => {  
-  splash.classList.add("hide");  
-}, 3000);  
-  
-function showStatus(message) {  
-  statusBox.textContent = message;  
-  statusBox.classList.add("show");  
-}  
-  
-/* Tempel tautan */  
-pasteBtn.addEventListener("click", async () => {  
-  try {  
-    const text = await navigator.clipboard.readText();  
-  
-    if (!text) {  
-      showStatus("Clipboard kosong. Salin tautan TikTok terlebih dahulu.");  
-      return;  
-    }  
-  
-    urlInput.value = text.trim();  
-    showStatus("Tautan berhasil ditempel.");  
-  } catch {  
-    urlInput.focus();  
-    showStatus(  
-      "Tempel tautan secara manual: tekan lama kolom, lalu pilih Tempel."  
-    );  
-  }  
-});  
-  
-function validTikTokUrl(value) {  
-  try {  
-    const parsed = new URL(value);  
-    return /(^|\.)tiktok\.com$/i.test(parsed.hostname);  
-  } catch {  
-    return false;  
-  }  
-}  
-  
-/* DOWNLOAD */  
-downloadBtn.addEventListener("click", async () => {  
-  const url = urlInput.value.trim();  
-  
-  if (!url) {  
-    showStatus("Masukkan tautan TikTok terlebih dahulu.");  
-    urlInput.focus();  
-    return;  
-  }  
-  
-  if (!validTikTokUrl(url)) {  
-    showStatus("Tautan tidak valid. Gunakan tautan dari tiktok.com.");  
-    return;  
-  }  
-  
-  downloadBtn.disabled = true;  
-  downloadBtn.textContent = "MEMPROSES...";  
-  showStatus("Memproses tautan video...");  
-  
-  try {  
-    const apiUrl =  
-      "https://www.tikwm.com/api/?url=" + encodeURIComponent(url);  
-  
-    const response = await fetch(apiUrl);  
-  
-    if (!response.ok) {  
-      throw new Error("Layanan video sedang tidak tersedia.");  
-    }  
-  
-    const result = await response.json();  
-    const videoUrl = result?.data?.play || result?.data?.wmplay;  
-  
-    if (result.code !== 0 || !videoUrl) {  
-      throw new Error("Video tidak ditemukan. Coba periksa tautannya.");  
-    }  
-  
-    showStatus("Video siap. Memulai unduhan...");  
-  
-    /*  
-      Cara pertama: ambil file sebagai Blob.  
-      Berhasil jika server mengizinkan permintaan lintas domain.  
-    */  
-    try {  
-      const videoResponse = await fetch(videoUrl);  
-  
-      if (!videoResponse.ok) {  
-        throw new Error("Tidak dapat mengambil file video.");  
-      }  
-  
-      const blob = await videoResponse.blob();  
-  
-      if (!blob.size) {  
-        throw new Error("File video kosong.");  
-      }  
-  
-      const blobUrl = URL.createObjectURL(blob);  
-      const link = document.createElement("a");  
-  
-      link.href = blobUrl;  
-      link.download = "ZAL_TikTok_" + Date.now() + ".mp4";  
-      link.style.display = "none";  
-  
-      document.body.appendChild(link);  
-      link.click();  
-      link.remove();  
-  
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);  
-  
-      showStatus(  
-        "Perintah unduh telah dikirim. Periksa folder Download."  
-      );  
-  
-    } catch (downloadError) {  
-      /*  
-        Fallback ketika server melarang fetch lintas domain.  
-        Membuka URL video; browser/WebView mungkin menampilkan  
-        video atau menu unduh, bukan menyimpan otomatis.  
-      */  
-      const link = document.createElement("a");  
-  
-      link.href = videoUrl;  
-      link.target = "_blank";  
-      link.rel = "noopener";  
-      document.body.appendChild(link);  
-      link.click();  
-      link.remove();  
-  
-      showStatus(  
-        "Tautan video dibuka. Jika tidak otomatis tersimpan, " +  
-        "gunakan menu unduh pada browser."  
-      );  
-    }  
-  
-  } catch (error) {  
-    showStatus(  
-      (error.message || "Unduhan gagal.") +  
-      " Periksa koneksi internet dan coba lagi."  
-    );  
-  } finally {  
-    downloadBtn.disabled = false;  
-    downloadBtn.innerHTML = "↓ &nbsp; DOWNLOAD VIDEO";  
-  }  
-});  
-</script>  </body>  
+const $ = id => document.getElementById(id);
+const input = $("videoUrl");
+const button = $("downloadBtn");
+const status = $("status");
+const results = $("results");
+const items = $("items");
+
+function message(text){
+  status.textContent = text;
+  status.classList.add("show");
+}
+
+function validTikTokUrl(value){
+  try{
+    const u = new URL(value);
+    return /^https?:$/.test(u.protocol) &&
+      /(^|\.)tiktok\.com$/i.test(u.hostname);
+  }catch(e){return false}
+}
+
+$("pasteBtn").addEventListener("click",async()=>{
+  try{
+    const text = await navigator.clipboard.readText();
+    if(!text) throw new Error();
+    input.value = text.trim();
+    message("Tautan berhasil ditempel.");
+  }catch(e){
+    input.focus();
+    message("Tekan lama kolom tautan, lalu pilih Tempel.");
+  }
+});
+
+/*
+ * Unduh melalui fetch + Blob jika server mengizinkan CORS.
+ * Jika CORS diblokir, gunakan tautan langsung sebagai fallback.
+ */
+async function downloadFile(url, filename){
+  if(!/^https?:\/\//i.test(url)){
+    throw new Error("Alamat file tidak valid.");
+  }
+
+  message("Menyiapkan file unduhan...");
+
+  try{
+    const response = await fetch(url);
+    if(!response.ok) throw new Error("HTTP " + response.status);
+
+    const blob = await response.blob();
+    if(!blob.size) throw new Error("File kosong.");
+
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(()=>URL.revokeObjectURL(objectUrl),60000);
+    message("Perintah unduhan dikirim. Periksa folder Download.");
+    return;
+  }catch(error){
+    /*
+     * Fallback: navigasi langsung ke file.
+     * Pada browser tertentu, file akan diputar/dibuka.
+     * Pilih Download dari menu browser bila tersedia.
+     */
+    message("Server membatasi unduhan otomatis. Membuka file langsung...");
+    window.location.href = url;
+  }
+}
+
+function firstUrl(...values){
+  return values.find(v => typeof v === "string" &&
+    /^https?:\/\//i.test(v));
+}
+
+function addItem(title,url,type,index){
+  const row = document.createElement("div");
+  row.className = "item";
+
+  const img = document.createElement("img");
+  img.className = "thumb";
+  img.alt = type === "Foto" ? "Foto TikTok" : "Video TikTok";
+  img.loading = "lazy";
+
+  if(type === "Foto"){
+    img.src = url;
+    img.onerror = ()=>{
+      img.style.display = "none";
+    };
+  }else{
+    img.style.display = "none";
+  }
+
+  const info = document.createElement("div");
+  info.className = "info";
+
+  const titleEl = document.createElement("strong");
+  titleEl.textContent = title;
+
+  const typeEl = document.createElement("small");
+  typeEl.textContent = type === "Foto" ? "Gambar TikTok" : "Video MP4";
+
+  const link = document.createElement("a");
+  link.className = "action";
+  link.href = url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = type === "Foto" ? "⬇ DOWNLOAD FOTO" : "⬇ DOWNLOAD VIDEO";
+
+  /*
+   * Jangan pakai target=_blank untuk proses unduhan otomatis.
+   * Klik akan mencoba mengambil file langsung.
+   */
+  link.addEventListener("click",async(event)=>{
+    event.preventDefault();
+    await downloadFile(
+      url,
+      type === "Foto"
+        ? "ZAL_TikTok_Foto_" + index + ".jpg"
+        : "ZAL_TikTok_Video.mp4"
+    );
+  });
+
+  info.append(titleEl,typeEl,link);
+  row.append(img,info);
+  items.appendChild(row);
+}
+
+button.addEventListener("click",async()=>{
+  const url = input.value.trim();
+
+  if(!url){
+    message("Masukkan tautan TikTok terlebih dahulu.");
+    input.focus();
+    return;
+  }
+  if(!validTikTokUrl(url)){
+    message("Tautan tidak valid. Gunakan tautan dari tiktok.com.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "MEMPROSES...";
+  results.classList.remove("show");
+  items.replaceChildren();
+
+  try{
+    message("Mengambil data video/foto dari layanan...");
+    const api = "https://www.tikwm.com/api/?url=" + encodeURIComponent(url);
+
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(),25000);
+
+    let response;
+    try{
+      response = await fetch(api,{signal:controller.signal});
+    }finally{
+      clearTimeout(timer);
+    }
+
+    if(!response.ok){
+      throw new Error("Layanan API gagal merespons (HTTP "+response.status+").");
+    }
+
+    const result = await response.json();
+    if(result.code !== 0 || !result.data){
+      throw new Error(result.msg || "Video/foto tidak ditemukan.");
+    }
+
+    const data = result.data;
+    let count = 0;
+
+    const video = firstUrl(data.hdplay,data.play,data.wmplay);
+    if(video){
+      addItem("Video TikTok",""+video,"Video",++count);
+    }
+
+    let photos = [];
+    if(Array.isArray(data.images)){
+      photos = data.images;
+    }else if(Array.isArray(data.image_post)){
+      photos = data.image_post;
+    }
+
+    for(const photo of photos){
+      const photoUrl = typeof photo === "string"
+        ? photo
+        : firstUrl(photo?.url,photo?.src,photo?.image);
+
+      if(photoUrl){
+        addItem("Foto TikTok "+(count+1),photoUrl,"Foto",++count);
+      }
+    }
+
+    if(count === 0){
+      throw new Error("API tidak menyediakan tautan unduhan untuk konten ini.");
+    }
+
+    results.classList.add("show");
+    message("Ditemukan "+count+" file. Tekan tombol DOWNLOAD pada setiap item. Jika unduhan otomatis diblokir server, browser akan mencoba membuka file langsung.");
+
+  }catch(error){
+    let detail = error.name === "AbortError"
+      ? "Waktu koneksi habis."
+      : (error.message || "Kesalahan tidak diketahui.");
+
+    message("Gagal mengambil konten. "+detail+" Periksa internet atau coba lagi beberapa saat. Jika dibuka dari WebView, API mungkin diblokir oleh CORS.");
+  }finally{
+    button.disabled = false;
+    button.textContent = "⬇ CARI VIDEO / FOTO";
+  }
+});
+</script></body>
 </html>
